@@ -51,23 +51,23 @@ func _ready():
 			i += 1
 		
 		
-#		var slash_found = path.rfind("/")
-#		if slash_found > -1:
-#			var dir = "/" + path.left(slash_found)
-#			var label = path.right(slash_found + 1)
-#			control._initialize_setting(exported.sections_keys, label)
-#			if not pages_controls.has(dir):
-#				pages_controls[dir] = []
-#			print(dir)
-#			print(label)
-#			var folder_button = preload("folder_button.tscn").instance()
-#			folder_button._initialize_setting([], dir)
-#			folder_button.init_from_directory(dir)
-#			pages_controls[""].append(folder_button)
-#			pages_controls[dir].append(control)
-#		else:
-#			control._initialize_setting(exported.sections_keys, exported.label)
-#			pages_controls[""].append(control)
+		var slash_found = path.rfind("/")
+		if slash_found > -1:
+			var dir = "/" + path.left(slash_found)
+			var label = path.right(slash_found + 1)
+			control._initialize_setting(exported.sections_keys, label)
+			if not pages_controls.has(dir):
+				pages_controls[dir] = []
+			print(dir)
+			print(label)
+			var folder_button = preload("folder_button.tscn").instance()
+			folder_button._initialize_setting([], dir)
+			folder_button.init_from_directory(dir)
+			pages_controls[""].append(folder_button)
+			pages_controls[dir].append(control)
+		else:
+			control._initialize_setting(exported.sections_keys, exported.label)
+			pages_controls[""].append(control)
 	
 	_load_directory("")
 
