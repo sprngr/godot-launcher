@@ -1,44 +1,45 @@
 extends App
 
-#enum Operation { SCAN, CONNECT }
+enum Operation { SCAN, CONNECT }
 enum Encryption { OFF, ON }
 
-#class NetworkDetails extends Reference:
-#	var id : int
-#	var name : String
-#	var encryption  = Encryption.OFF
-#	var quality : int
-#	var password : String
+class NetworkDetails extends Reference:
+	var id : int
+	var name : String
+	var encryption  = Encryption.OFF
+	var quality : int
+	var password : String
 
 var processing = false
-#var thread : Thread = null
-#var semaphore : Semaphore = null
-#var ssid_regex : RegEx
-#var encryption_regex : RegEx
-#var quality_regex: RegEx
+var thread : Thread = null
+var semaphore : Semaphore = null
+var ssid_regex : RegEx
+var encryption_regex : RegEx
+var quality_regex: RegEx
 
 var last_focused_hotspot : Control = null
-#var should_exit = false
-#var operation = null
-#var connecting_network : NetworkDetails = null
+var should_exit = false
+var operation = null
+var connecting_network : NetworkDetails = null
+var connecting_hotspot : NetworkDetails = null
 
 onready var hotspots_container = $ConstraintContainer/ScrollContainer/HotspotsContainer
 onready var wifi_service = System.get_launcher().get_tagged_service("wifi")
 
 
 func _ready():
-#	ssid_regex = RegEx.new()
-#	ssid_regex.compile("Essid:\\s+(.+)\\n")
-#
-#	encryption_regex = RegEx.new()
-#	encryption_regex.compile("Encryption Method:\\s+(\\w*)\\n")
-#
-#	quality_regex = RegEx.new()
-#	quality_regex.compile("Quality:\\s+(\\d*)\\n")
-#
-#	semaphore = Semaphore.new()
-#	thread = Thread.new()
-#	thread.start(self, "_thread_function", null)
+	ssid_regex = RegEx.new()
+	ssid_regex.compile("Essid:\\s+(.+)\\n")
+
+	encryption_regex = RegEx.new()
+	encryption_regex.compile("Encryption Method:\\s+(\\w*)\\n")
+
+	quality_regex = RegEx.new()
+	quality_regex.compile("Quality:\\s+(\\d*)\\n")
+
+	semaphore = Semaphore.new()
+	thread = Thread.new()
+	thread.start(self, "_thread_function", null)
 	pass
 
 
@@ -98,10 +99,10 @@ func _hotspot_connect_attempt(confirmed, hotspot_details):
 		processing = true
 		System.emit_event("set_loading", [true])
 		wifi_service.connect("connection_attempted", self, "_connection_attempted", [], CONNECT_ONESHOT)
-#	operation = Operation.CONNECT
-#	connecting_hotspot = hotspot_details
-#
-#	semaphore.post()
+	operation = Operation.CONNECT
+	connecting_hotspot = hotspot_details
+
+	semaphore.post()
 
 
 func _hotspot_focused(hotspot : Control):
@@ -113,8 +114,8 @@ func _scan_hotspots():
 		processing = true
 		System.emit_event("set_loading", [true])
 		wifi_service.connect("scan_completed", self, "_scan_completed", [], CONNECT_ONESHOT)
-#	operation = Operation.SCAN
-#	semaphore.post()
+	operation = Operation.SCAN
+	semaphore.post()
 
 
 func _scan_completed(hotspots : Array):
@@ -161,75 +162,75 @@ func _connection_attempted(hotspot, result):
 		System.emit_event("notification", [tr("DEFAULT.WIFI_CONNECTION_SUCCESS").format([hotspot.name]), "success"])
 	else:
 		System.emit_event("notification", [tr("DEFAULT.WIFI_CONNECTION_FAILED").format([hotspot.name]), "error"])
-#	connecting_network = null
+	connecting_network = null
 
 
-#func _thread_function(data):
-#	var output = []
-#
-#	while not should_exit:
-#		semaphore.wait()
-#		if should_exit:
-#			return
-#
-#		if operation == Operation.SCAN:
-#			# Scan wireless hotspots and list them
-#			OS.execute("bash", ["-c", "wicd-cli -ySl"], true, output, true)
-#			print("List network result: "+ str(output))
-#
-#			var networks_amount = output[0].split("\n").size() - 2 if output.size() > 0 else 0
-#			print("Found " + str(networks_amount) + " networks")
-#
-#			var networks_details = []
-#			for i in range(networks_amount):
-#				OS.execute("bash", ["-c", "wicd-cli --wireless -n " + str(i) + " -d"], true, output, true)
-#				print("Network "+str(i) + " details result: " + str(output))
-#				var name = ""
-#				var encryption_method = "Off"
-#				var quality = 0
-#
-#				var output_string = output[0] if output.size() > 0 else ""
-#				print(output_string)
-#
-#				var res : RegExMatch = ssid_regex.search(output_string)
-#				if res != null:
-#					name = res.get_string(1)
-#				res = encryption_regex.search(output_string)
-#				if res != null:
-#					encryption_method = res.get_string(1)
-#				res = quality_regex.search(output_string)
-#				if res != null:
-#					quality = int(res.get_string(1))
-#
-#				var entry : NetworkDetails = NetworkDetails.new()
-#				entry.id = i
-#				entry.name = name
-#				entry.encryption = Encryption.ON if encryption_method != "Off" else Encryption.OFF
-#				entry.quality = quality
-#				entry.password = ""
-#				print("Adding entry: " + str(entry))
-#				networks_details.append(entry)
-#
-#			print("Final result: " + str(networks_details))
-#			call_deferred("_scan_completed", networks_details)
-#		elif operation == Operation.CONNECT:
-#			var result = -1
-#			if connecting_network != null:
-#				if not connecting_network.password.empty():
-#					OS.execute("bash", ["-c", "wicd-cli -y -n " + str(connecting_network.id) + " -p apsk -s " +  connecting_network.password], true, output, true)
-#					print("Set password property: " + str(output))
-#				if connecting_network.id >= 0:
-#					result = OS.execute("bash", ["-c", "wicd-cli -y -n " + str(connecting_network.id) + " -c"], true, output, true)
-#					print("Connection attempt: " + str(output))
-#
-#			call_deferred("_connection_attempted", result)
+func _thread_function(data):
+	var output = []
+
+	while not should_exit:
+		semaphore.wait()
+		if should_exit:
+			return
+
+		if operation == Operation.SCAN:
+			# Scan wireless hotspots and list them
+			OS.execute("bash", ["-c", "wicd-cli -ySl"], true, output, true)
+			print("List network result: "+ str(output))
+
+			var networks_amount = output[0].split("\n").size() - 2 if output.size() > 0 else 0
+			print("Found " + str(networks_amount) + " networks")
+
+			var networks_details = []
+			for i in range(networks_amount):
+				OS.execute("bash", ["-c", "wicd-cli --wireless -n " + str(i) + " -d"], true, output, true)
+				print("Network "+str(i) + " details result: " + str(output))
+				var name = ""
+				var encryption_method = "Off"
+				var quality = 0
+
+				var output_string = output[0] if output.size() > 0 else ""
+				print(output_string)
+
+				var res : RegExMatch = ssid_regex.search(output_string)
+				if res != null:
+					name = res.get_string(1)
+				res = encryption_regex.search(output_string)
+				if res != null:
+					encryption_method = res.get_string(1)
+				res = quality_regex.search(output_string)
+				if res != null:
+					quality = int(res.get_string(1))
+
+				var entry : NetworkDetails = NetworkDetails.new()
+				entry.id = i
+				entry.name = name
+				entry.encryption = Encryption.ON if encryption_method != "Off" else Encryption.OFF
+				entry.quality = quality
+				entry.password = ""
+				print("Adding entry: " + str(entry))
+				networks_details.append(entry)
+
+			print("Final result: " + str(networks_details))
+			call_deferred("_scan_completed", networks_details)
+		elif operation == Operation.CONNECT:
+			var result = -1
+			if connecting_network != null:
+				if not connecting_network.password.empty():
+					OS.execute("bash", ["-c", "wicd-cli -y -n " + str(connecting_network.id) + " -p apsk -s " +  connecting_network.password], true, output, true)
+					print("Set password property: " + str(output))
+				if connecting_network.id >= 0:
+					result = OS.execute("bash", ["-c", "wicd-cli -y -n " + str(connecting_network.id) + " -c"], true, output, true)
+					print("Connection attempt: " + str(output))
+
+			call_deferred("_connection_attempted", result)
 
 
-#func _notification(what):
-#	if what == NOTIFICATION_PREDELETE:
-#		should_exit = true
-#		semaphore.post()
-#		thread.wait_to_finish()
+func _notification(what):
+	if what == NOTIFICATION_PREDELETE:
+		should_exit = true
+		semaphore.post()
+		thread.wait_to_finish()
 
 
 # Override this function to declare launcher-wide components dependencies
