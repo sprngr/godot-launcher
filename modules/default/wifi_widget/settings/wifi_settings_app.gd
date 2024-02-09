@@ -223,7 +223,7 @@ func _thread_function(data):
 					result = OS.execute("bash", ["-c", "wicd-cli -y -n " + str(connecting_network.id) + " -c"], true, output, true)
 					print("Connection attempt: " + str(output))
 
-			call_deferred("_connection_attempted", connecting_network, result)
+			call_deferred("_connection_attempted", connecting_hotspot, result)
 
 
 func _notification(what):
