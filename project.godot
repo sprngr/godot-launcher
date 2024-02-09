@@ -144,7 +144,7 @@ window/size/resizable.OSX=true
 
 [editor_plugins]
 
-enabled=PoolStringArray( "Todo_Manager", "makefile_launcher", "zylann.translation_editor" )
+enabled=PoolStringArray(  )
 
 [input]
 

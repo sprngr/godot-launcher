@@ -179,7 +179,7 @@ func _disable_components(to_disable : Array) -> Array:
 	while to_disable.size() > 0:
 		var disabling = to_disable.pop_front()
 		if not disabled.has(disabling):
-			print("Disabling component " + str(disabling.id))
+			print("[GODOT] Disabling component " + str(disabling.id))
 			# Mark this component as disabled and remove it from available components.
 			disabled[disabling] = true
 			components.erase(disabling.id)

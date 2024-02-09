@@ -62,9 +62,9 @@ func init(script : LauncherEntry):
 	var apps_path = globalized_project_path.left(globalized_project_path.rfind("/", globalized_project_path.length() - 2))
 	var entry_path = ProjectSettings.globalize_path(script.path).replace("\\", "/")
 	
-#	print("Icons path: " + icons_path)
-#	print("Apps path: " + apps_path)
-#	print("Entry path: " + entry_path)
+	print("Icons path: " + icons_path)
+	print("Apps path: " + apps_path)
+	print("Entry path: " + entry_path)
 	
 	var search_icon_path = entry_path.replace(apps_path, "").get_basename() + ".png"
 	var launcher_directory = "/" + ProjectSettings.globalize_path("res://").get_base_dir().get_file()

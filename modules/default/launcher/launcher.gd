@@ -15,7 +15,7 @@ const list_view = preload("views/list_view.tscn")
 var running_app : PackedScene
 var last_focused_entry : Control = null
 
-var menu_directory : String = "/home/cpi/apps/Menu"
+var menu_directory : String = "/home/gs/apps/Menu"
 var apps_directory : String = "res://apps"
 
 var current_directory : String = ""
@@ -27,7 +27,8 @@ var current_view = null
 
 func _ready():
 	if OS.has_feature("x86_64"):
-		menu_directory = "E:\\Documenti\\Git\\apps\\Menu"
+		print("[DEBUG] Overriding menu directory")
+		menu_directory = "F:\\workspace\\cpi_testing\\apps\\Menu"
 	
 	running_app = Modules.get_component_from_settings("system/running_app").resource
 	
