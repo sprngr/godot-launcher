@@ -109,8 +109,7 @@ Shell scripts will appear by default, binaries have to be placed inside a folder
 │   ├── project.godot		The launcher project file, open it to edit the launcher with the Godot editor
 │   ├── godot			The Godot Engine executable, used to run the launcher
 │   ├── compton			The compositor, this should run together with the launcher
-│   ├── settings.conf		Launcher settings using a INI-style formatting
-│   └── version.json		Version info, useful when checking for updates
+│   └── settings.conf		Launcher settings using a INI-style formatting
 │
 ├── games
 │   ├── FreeDM
