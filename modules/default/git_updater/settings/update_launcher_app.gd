@@ -209,7 +209,7 @@ func _thread_function(data):
 			var exit_code = OS.execute("bash", ["-c", "git fetch --all"], true, output, true)
 #			print("Fetch (" + str(exit_code) + "): " + str(output))
 			if exit_code == 0:
-				exit_code = OS.execute("bash", ["-c", "git reset --hard"], true, output, true)
+				exit_code = OS.execute("bash", ["-c", "git pull"], true, output, true)
 #				print("Reset (" + str(exit_code) + "): " + str(output))
 				if exit_code == 0:
 					result = OK
