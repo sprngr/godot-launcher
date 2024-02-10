@@ -26,18 +26,18 @@ __meta__ = {
 }
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
-margin_left = 68.0
-margin_top = 89.0
-margin_right = 251.0
-margin_bottom = 151.0
+margin_left = 28.0
+margin_top = 71.0
+margin_right = 292.0
+margin_bottom = 168.0
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
 [node name="MarginContainer" type="MarginContainer" parent="PanelContainer"]
 margin_left = 7.0
 margin_top = 7.0
-margin_right = 176.0
-margin_bottom = 55.0
+margin_right = 257.0
+margin_bottom = 90.0
 custom_constants/margin_right = 16
 custom_constants/margin_top = 8
 custom_constants/margin_left = 16
@@ -46,26 +46,49 @@ custom_constants/margin_bottom = 8
 [node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer"]
 margin_left = 16.0
 margin_top = 8.0
-margin_right = 153.0
-margin_bottom = 40.0
+margin_right = 234.0
+margin_bottom = 75.0
 size_flags_horizontal = 4
 size_flags_vertical = 4
 alignment = 1
 
 [node name="LargeLabel" parent="PanelContainer/MarginContainer/VBoxContainer" instance=ExtResource( 1 )]
-margin_right = 137.0
-text = "X Godot Launcher"
+margin_right = 218.0
+margin_bottom = 31.0
+text = "Original Godot Launcher by Samuele Zolfanelli"
 align = 1
+autowrap = true
 font_values = {
 "font": "large_font"
 }
 
 [node name="SmallLabel" parent="PanelContainer/MarginContainer/VBoxContainer" instance=ExtResource( 2 )]
-margin_top = 18.0
-margin_right = 137.0
-margin_bottom = 32.0
-text = "by Samuele Zolfanelli"
+margin_top = 35.0
+margin_right = 218.0
+margin_bottom = 49.0
 align = 1
 font_values = {
 "font": "small_font"
+}
+
+[node name="LargeLabel2" parent="PanelContainer/MarginContainer/VBoxContainer" instance=ExtResource( 1 )]
+margin_top = 53.0
+margin_right = 218.0
+margin_bottom = 67.0
+text = "Revised Godot Launcher by sprngr"
+align = 1
+font_values = {
+"font": "large_font"
+}
+constant_values = {
+
+}
+color_values = {
+
+}
+stylebox_values = {
+
+}
+texture_values = {
+
 }
