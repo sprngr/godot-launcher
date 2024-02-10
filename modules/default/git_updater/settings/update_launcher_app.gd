@@ -2,7 +2,7 @@ extends App
 
 enum Operation { CHECK, UPDATE }
 enum State { IDLE, UPDATE_AVAILABLE, CONFIRM_UPDATE }
-enum Check { ERROR, COMMIT_UPDATE_AVAILABLE, UPDATE_AVAILABLE, UP_TO_DATE }
+enum Check { ERROR, COMMIT_UPDATE_AVAILABLE, UP_TO_DATE }
 
 var processing = false
 var thread : Thread = null
