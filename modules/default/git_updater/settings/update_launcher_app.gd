@@ -157,9 +157,6 @@ func _check_completed(check_result, data):
 		Check.COMMIT_UPDATE_AVAILABLE:
 			message.text = tr("DEFAULT.UPDATE_AVAILABLE").format([data.version])
 			_set_state(State.UPDATE_AVAILABLE)
-		Check.UPDATE_AVAILABLE:
-			message.text = tr("DEFAULT.UPDATE_AVAILABLE").format([data.version])
-			_set_state(State.UPDATE_AVAILABLE)
 		Check.UP_TO_DATE:
 			message.text = tr("DEFAULT.LAUNCHER_UP_TO_DATE")
 			_set_state(State.IDLE)
@@ -173,20 +170,6 @@ func _update_completed(result):
 		System.emit_event("set_loading", [false])
 		message.text = tr("DEFAULT.UPDATE_ERROR")
 		_set_state(State.IDLE)
-
-
-func _request_completed(result, response_code, headers, body, semaphore, res):
-	if result == OK:
-		var response = parse_json(body.get_string_from_utf8())
-		if response.version != System.get_version():
-			res.append(Check.UPDATE_AVAILABLE)
-		else:
-			res.append(Check.UP_TO_DATE)
-		res.append(response.version)
-	else:
-		res.append(Check.ERROR)
-		res.append("")
-	semaphore.post()
 
 
 func _thread_function(data):
