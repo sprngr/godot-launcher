@@ -2,7 +2,7 @@ extends App
 
 enum Operation { CHECK, UPDATE }
 enum State { IDLE, UPDATE_AVAILABLE, CONFIRM_UPDATE }
-enum Check { ERROR, COMMIT_UPDATE_AVAILABLE, UP_TO_DATE }
+enum Check { ERROR, UPDATE_AVAILABLE, UP_TO_DATE }
 
 var processing = false
 var thread : Thread = null
@@ -27,11 +27,8 @@ func _ready():
 	state = State.IDLE
 	
 	var output = []
-#	OS.execute('cmd', ['/C', "git log -1 --format='%at' | xargs -I{} date -d @{} +%Y/%m/%d_%H:%M:%S"], true, output, true)
-#	OS.execute('cmd', ['/C', "git log -1 --format='%at'"], true, output, true)
 	OS.execute("bash", ["-c", "git log -1 --format='%at' | xargs -I{} date -d @{} +%Y/%m/%d_%H:%M:%S"], true, output, false)
 	if output.size() > 0 and output[0].length() > 0:
-#		print(output)
 		var pair = output[0].split("_")
 		var ymd = pair[0].split("/")
 		var hms = pair[1].split(":")
@@ -154,7 +151,7 @@ func _check_completed(check_result, data):
 		Check.ERROR:
 			message.text = tr("DEFAULT.UPDATE_CHECK_ERROR")
 			_set_state(State.IDLE)
-		Check.COMMIT_UPDATE_AVAILABLE:
+		Check.UPDATE_AVAILABLE:
 			message.text = tr("DEFAULT.UPDATE_AVAILABLE").format([data.version])
 			_set_state(State.UPDATE_AVAILABLE)
 		Check.UP_TO_DATE:
@@ -199,8 +196,8 @@ func _thread_function(data):
 				print ("Remote Version: " + remote_version)
 			
 				if System.get_version() != remote_version:
-					result[0] = Check.COMMIT_UPDATE_AVAILABLE
-					result[1] = result[1] + "+"
+					result[0] = Check.UPDATE_AVAILABLE
+					result[1] = remote_version
 			
 			call_deferred("_check_completed", result[0], { "version": result[1] })
 		elif operation == Operation.UPDATE:
