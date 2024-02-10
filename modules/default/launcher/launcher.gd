@@ -15,7 +15,7 @@ const list_view = preload("views/list_view.tscn")
 var running_app : PackedScene
 var last_focused_entry : Control = null
 
-var menu_directory : String = "/home/gs/apps/Menu"
+var menu_directory : String = "/home/cpi/apps/Menu"
 var apps_directory : String = "res://apps"
 
 var current_directory : String = ""
