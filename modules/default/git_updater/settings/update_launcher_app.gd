@@ -198,32 +198,21 @@ func _thread_function(data):
 			return
 		
 		if operation == Operation.CHECK:
-			var req_semaphore = Semaphore.new()
-			# Check if an update is available
-			var result = []
-			http.connect("request_completed", self, "_request_completed", [req_semaphore, result])
-			http.request("https://raw.githubusercontent.com/sprngr/godot-launcher/main/version.json")
-			req_semaphore.wait()
-			http.disconnect("request_completed", self, "_request_completed")
+
+			var result = [
+				Check.UP_TO_DATE,
+				System.get_version()
+			]
+
+			OS.execute("bash", ["-c", "git remote update && git rev-parse ${1:-'@{u}'}"], true, output, true)
+			var remote_version = output[0]
+
+			OS.execute("bash", ["-c", "git merge-base @ ${1:-'@{u}'} | head -c 7"], true, output, true)
+			var base_version = output[0]
 			
-#			print("Result of first check is " + str(result))
-			if result[0] == Check.UP_TO_DATE:
-				# Check latest commit instead of version
-				var exit_code = OS.execute("bash", ["-c", "git remote update"], true, output, true)
-#				print("Exit code " + str(exit_code) + " for 'git remote update' with result: " + str(output))
-				if exit_code != 0:
-					result[0] = Check.ERROR
-				else:
-					OS.execute("bash", ["-c", "git show --no-notes --format=format:'%H' origin/main | head -n 1"], true, output, true)
-					print("Remote: " + str(output))
-					var remote_commit = output[0]
-					OS.execute("bash", ["-c", "git show --no-notes --format=format:'%H' main | head -n 1"], true, output, true)
-					print("Local: " + str(output))
-					var local_commit = output[0]
-					
-					if remote_commit != local_commit:
-						result[0] = Check.COMMIT_UPDATE_AVAILABLE
-						result[1] = result[1] + "+"
+			if System.get_version() == base_version:
+				result[0] = Check.COMMIT_UPDATE_AVAILABLE
+				result[1] = result[1] + "+"
 			
 			call_deferred("_check_completed", result[0], { "version": result[1] })
 		elif operation == Operation.UPDATE:
@@ -232,7 +221,7 @@ func _thread_function(data):
 			var exit_code = OS.execute("bash", ["-c", "git fetch --all"], true, output, true)
 #			print("Fetch (" + str(exit_code) + "): " + str(output))
 			if exit_code == 0:
-				exit_code = OS.execute("bash", ["-c", "git reset --hard origin/main"], true, output, true)
+				exit_code = OS.execute("bash", ["-c", "git reset --hard"], true, output, true)
 #				print("Reset (" + str(exit_code) + "): " + str(output))
 				if exit_code == 0:
 					result = OK
