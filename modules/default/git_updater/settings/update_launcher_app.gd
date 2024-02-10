@@ -202,7 +202,7 @@ func _thread_function(data):
 			# Check if an update is available
 			var result = []
 			http.connect("request_completed", self, "_request_completed", [req_semaphore, result])
-			http.request("https://raw.githubusercontent.com/samdze/godot-launcher/main/version.json")
+			http.request("https://raw.githubusercontent.com/sprngr/godot-launcher/main/version.json")
 			req_semaphore.wait()
 			http.disconnect("request_completed", self, "_request_completed")
 			
