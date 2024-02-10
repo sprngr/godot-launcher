@@ -210,7 +210,7 @@ func _thread_function(data):
 			OS.execute("bash", ["-c", "git merge-base @ ${1:-'@{u}'} | head -c 7"], true, output, true)
 			var base_version = output[0]
 			
-			if System.get_version() == base_version:
+			if base_version != remote_version:
 				result[0] = Check.COMMIT_UPDATE_AVAILABLE
 				result[1] = result[1] + "+"
 			
