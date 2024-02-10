@@ -1,7 +1,7 @@
 extends LauncherEntry
 
 var thread : Thread
-var debug = true
+var debug = false
 
 
 func get_label():
@@ -29,5 +29,5 @@ func _execution_terminated(result):
 
 
 func _import_thread(data):
-	var result = OS.execute("bash", ["-c", "godot-tools" + ("-debug" if debug else "") +" ~/godot-launcher/project.godot -q -v > /tmp/godot-importer.log 2>&1"], true)
+	var result = OS.execute("bash", ["-c", "godot" + ("-debug" if debug else "") +" ~/godot-launcher/project.godot -q -v > /tmp/godot-importer.log 2>&1"], true)
 	call_deferred("_execution_terminated", result)

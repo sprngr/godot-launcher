@@ -37,7 +37,7 @@ func _ready():
 
 func _focus():
 	emit_signal("window_mode_request", false)
-	emit_signal("title_change_request", "GameShell")
+	emit_signal("title_change_request", "GameSH>")
 	emit_signal("display_mode_request", Launcher.Mode.OPAQUE)
 	_update_promtps()
 	if last_focused_entry != null:
