@@ -203,16 +203,21 @@ func _thread_function(data):
 				Check.UP_TO_DATE,
 				System.get_version()
 			]
-
-			OS.execute("bash", ["-c", "git remote update && git rev-parse ${1:-'@{u}'}"], true, output, true)
-			var remote_version = output[0]
-
-			OS.execute("bash", ["-c", "git merge-base @ ${1:-'@{u}'} | head -c 7"], true, output, true)
-			var base_version = output[0]
 			
-			if base_version != remote_version:
-				result[0] = Check.COMMIT_UPDATE_AVAILABLE
-				result[1] = result[1] + "+"
+			print ("Local Version: " + System.get_version())
+			
+			var exit_code = OS.execute("bash", ["-c", "git remote update"], true, output, true)
+			if exit_code != 0:
+				result[0] = Check.ERROR
+			else:
+				OS.execute("bash", ["-c", "git rev-parse --short ${1:-'@{u}'}"], true, output, true)
+				var remote_version = output[0]
+			
+				print ("Remote Version: " + remote_version)
+			
+				if System.get_version() != remote_version:
+					result[0] = Check.COMMIT_UPDATE_AVAILABLE
+					result[1] = result[1] + "+"
 			
 			call_deferred("_check_completed", result[0], { "version": result[1] })
 		elif operation == Operation.UPDATE:
@@ -227,7 +232,6 @@ func _thread_function(data):
 					result = OK
 			
 			call_deferred("_update_completed", result)
-
 
 func _notification(what):
 	if what == NOTIFICATION_PREDELETE:
