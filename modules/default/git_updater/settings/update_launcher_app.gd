@@ -198,19 +198,17 @@ func _thread_function(data):
 				if System.get_version() != remote_version:
 					result[0] = Check.UPDATE_AVAILABLE
 					result[1] = remote_version
-			
+
 			call_deferred("_check_completed", result[0], { "version": result[1] })
 		elif operation == Operation.UPDATE:
 			# Update the launcher
 			var result = FAILED
 			var exit_code = OS.execute("bash", ["-c", "git fetch --all"], true, output, true)
-#			print("Fetch (" + str(exit_code) + "): " + str(output))
 			if exit_code == 0:
 				exit_code = OS.execute("bash", ["-c", "git pull"], true, output, true)
-#				print("Reset (" + str(exit_code) + "): " + str(output))
 				if exit_code == 0:
 					result = OK
-			
+
 			call_deferred("_update_completed", result)
 
 func _notification(what):

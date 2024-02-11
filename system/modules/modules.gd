@@ -161,6 +161,7 @@ func _detect_unavailable_components() -> Array:
 	for id in components.keys():
 		var c = components[id]
 		if not c.definition._is_available():
+			print("[DEBUG] Unavailable widget" + id)
 			unavailable.append(c)
 			continue
 		var component_dependencies = c.definition._get_dependencies()

@@ -22,6 +22,7 @@ func _update_status():
 	var texture = charging_texture if plugged else battery_texture
 	
 	var y = 0
+	
 	if percentage < 11:
 		y = 0
 	elif percentage < 22:
@@ -41,6 +42,11 @@ func _update_status():
 	elif percentage <= 100:
 		y = atlas_cell_size.y * 8
 	
+	# Override for USB powered w/o battery
+	if plugged and percentage < 0:
+		y = atlas_cell_size.y * 9	
+		label.text = "USB%"
+	
 	if icon.region.position.y != y or icon.atlas != texture:
 		icon.atlas = texture
 		icon.region.position.y = y
@@ -58,7 +64,7 @@ func _notification(what):
 
 # Override this function to check whether this Component can be used on the device
 static func _is_available():
-	return OS.get_power_state() != OS.POWERSTATE_NO_BATTERY and OS.get_power_state() != OS.POWERSTATE_UNKNOWN
+	return OS.get_power_state() != OS.POWERSTATE_UNKNOWN
 
 
 static func _get_component_name():
