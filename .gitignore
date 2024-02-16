@@ -26,6 +26,7 @@ makefile
 modules/*
 !modules/default
 apps/*
+!apps/CaveStory.sh
 !apps/keyboard_entry.gd
 !apps/PICO-8.sh
 !apps/quit_entry.gd
