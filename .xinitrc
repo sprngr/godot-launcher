@@ -2,7 +2,7 @@ export DISPLAY=:0
 
 RESOLUTION=`xdpyinfo | awk '/dimensions/{print $2}'`
 
-feh --bg-center --randomize ~/godot-launcher/wallpaper/*
+feh --bg-center --randomize ~/godot-launcher/wallpaper/*.png
 
 mplayer -volume 50 /home/cpi/music/gameboy-startup.mp3 2>&1 &
 
