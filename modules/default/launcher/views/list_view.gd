@@ -49,6 +49,8 @@ func select_entry(index):
 func _entry_focus_entered(entry):
 	emit_signal("entry_focused", entry)
 
+func _entry_focus_exited(entry):
+	entry.unfocus()
 
 func _entry_input(event : InputEvent, entry):
 	if event.is_action_pressed("ui_accept"):
