@@ -29,7 +29,7 @@ func get_label() -> String:
 # script is searched and returned if found.
 func get_icon() -> Texture:
 	var icon_path = get_script().resource_path.get_basename() + ".png"
-	if ResourceLoader.has(icon_path):
+	if ResourceLoader.exists(icon_path):
 		return ResourceLoader.load(get_script().resource_path.get_basename() + ".png") as Texture
 	return null
 
